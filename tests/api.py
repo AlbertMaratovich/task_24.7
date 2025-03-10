@@ -63,3 +63,31 @@ class PetApi:
         except:
             result = res.text
         return status, result
+
+    def post_add_pet_simple(self, auth_key, name, animal_type, age):
+        headers = {"auth_key": auth_key}
+        body = {
+            "name": name,
+            "animal_type": animal_type,
+            "age": age
+        }
+        res = requests.post(self.base_url + "/api/create_pet_simple", headers=headers, data=body)
+        status = res.status_code
+        result = ""
+        try:
+            result = res.json()
+        except:
+            result = res.text
+        return status, result
+
+    def post_add_photo_pet(self, auth_key, pet_id, pet_photo):
+        headers = {"auth_key": auth_key}
+        file = {'pet_photo': (pet_photo, open(pet_photo, 'rb'), 'image/jpeg')}
+        res = requests.post(self.base_url + "/api/pets/set_photo/" + pet_id, headers=headers, files=file)
+        status = res.status_code
+        result = ""
+        try:
+            result = res.json()
+        except:
+            result = res.text
+        return status, result

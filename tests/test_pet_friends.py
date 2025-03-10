@@ -47,3 +47,21 @@ def test_delete_pet():
     status = test1.delete_pet(auth_key["key"], list_pets["pets"][0]["id"])
     assert status == 200
 
+
+def test_add_pet_simple():
+    _, auth_key = test1.get_key(email, password)
+    name = "Arnold"
+    animal_type = "Bull"
+    age = 18
+    status, result = test1.post_add_pet_simple(auth_key["key"], name, animal_type, age)
+    assert status == 200
+    assert name in result["name"]
+
+
+def test_add_photo_pet(pet_photo="images/Furmark.jpg"):
+    _, auth_key = test1.get_key(email, password)
+    _, list_pets = test1.get_list_pets(auth_key["key"], "my_pets")
+    pet_photo = os.path.join(os.path.dirname(__file__), pet_photo)
+    status, result = test1.post_add_photo_pet(auth_key["key"], list_pets["pets"][0]["id"], pet_photo)
+    assert status == 200
+    assert list_pets["pets"][0]["id"] in result["id"]
